@@ -1,15 +1,16 @@
 import {
-  BuiltInPowerupCodes,
   declareIndexPlugin,
   type ReactRNPlugin,
   WidgetLocation,
 } from "@remnote/plugin-sdk";
 import "../style.css";
 import "../index.css";
-// RemNote rejects plugin powerup codes shorter than 5 characters
-const HTML_POWERUP = "html_code";
-const CODE_POWERUP = "cd";
-const HTML_NAME = "html";
+import {
+  disableHtml,
+  enableHtml,
+  HTML_NAME,
+  HTML_POWERUP,
+} from "../html_rem";
 // Tokens RemNote may put in data-rem-tags for this powerup: its name and
 // its code, both stripped of non-alphanumeric characters
 const HTML_TAGS = [HTML_NAME, HTML_POWERUP].map((t) =>
@@ -73,24 +74,26 @@ async function onActivate(plugin: ReactRNPlugin) {
 
       // Add or remove the code and html Power-ups
       if (await rem.hasPowerup(HTML_POWERUP)) {
-        await rem.removePowerup(HTML_POWERUP);
-        await rem.removePowerup(CODE_POWERUP);
+        await disableHtml(rem);
       } else {
-        await rem.addPowerup(CODE_POWERUP);
-        await rem.addPowerup(HTML_POWERUP);
-        // Set the code block language to HTML
-        await rem.setPowerupProperty(
-          BuiltInPowerupCodes.Code,
-          "Language",
-          ["html"],
-        );
-        // Don't limit the code block height
-        await rem.setPowerupProperty(
-          BuiltInPowerupCodes.Code,
-          "DontBoundHeight",
-          ["true"],
-        );
+        await enableHtml(rem);
       }
+    },
+  });
+
+  // Register the popup used to pick an HTML file
+  await plugin.app.registerWidget("html_import", WidgetLocation.Popup, {
+    dimensions: { height: "auto", width: 400 },
+  });
+
+  // Register the import html file Command
+  await plugin.app.registerCommand({
+    id: "import-html-file",
+    name: "Import HTML file",
+    action: async () => {
+      // Remember where the file should be imported
+      const rem = await plugin.focus.getFocusedRem();
+      await plugin.widget.openPopup("html_import", { remId: rem?._id });
     },
   });
 }
