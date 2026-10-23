@@ -1,0 +1,21 @@
+{
+  "author": "MadeInShineA",
+  "name": "Remnote HTML",
+  "description": "Enable the use of HTML inside remnote",
+  "enableOnMobile": true,
+  "id": "MadeInShineA-zeb281m",
+  "repoUrl": "https://github.com/MadeInShineA/remnote-html",
+  "manifestVersion": 1,
+  "version": {
+    "major": 0,
+    "minor": 0,
+    "patch": 1
+  },
+  "requestNative": false,
+  "requiredScopes": [
+    {
+      "type": "All",
+      "level": "Read"
+    }
+  ]
+}

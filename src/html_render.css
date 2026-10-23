@@ -1,0 +1,11 @@
+.html-output {
+	display: block;
+	width: 100%;
+	border: none;
+}
+
+.html-hint {
+	color: gray;
+	font-size: 12px;
+	font-style: italic;
+}
