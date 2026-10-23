@@ -13,13 +13,16 @@ import '../html_render.css';
 const RESIZE_MESSAGE = 'html-render-resize';
 
 // Reset the default margin and report the content height
-// to the parent so the frame can grow with its content
-const FRAME_PREAMBLE = `<style>html, body { margin: 0; }</style>
+// to the parent so the frame can grow with its content.
+// The doctype must come first or the frame renders in quirks mode,
+// where the body stretches to the frame and the frame grows forever
+const FRAME_PREAMBLE = `<!doctype html>
+<style>html, body { margin: 0; }</style>
 <script>
 (function () {
 	function report() {
 		parent.postMessage(
-			{ type: '${RESIZE_MESSAGE}', height: document.documentElement.scrollHeight },
+			{ type: '${RESIZE_MESSAGE}', height: Math.ceil(document.documentElement.getBoundingClientRect().height) },
 			'*'
 		);
 	}
@@ -31,6 +34,10 @@ const FRAME_PREAMBLE = `<style>html, body { margin: 0; }</style>
 
 // Language key of RemNote's HTML code blocks
 const HTML_LANGUAGE = 'html';
+
+// Remove the HTML's own doctype since the preamble provides one
+const stripDoctype = (html: string) =>
+	html.replace(/^\s*<!doctype[^>]*>/i, '');
 
 export const HtmlRenderWidget = () => {
 	const plugin = usePlugin();
@@ -108,7 +115,7 @@ export const HtmlRenderWidget = () => {
 			ref={frameRef}
 			className="html-output"
 			sandbox="allow-scripts allow-popups"
-			srcDoc={FRAME_PREAMBLE + html}
+			srcDoc={FRAME_PREAMBLE + stripDoctype(html)}
 			style={{ height }}
 		/>
 	);
