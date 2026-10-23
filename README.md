@@ -1,7 +1,7 @@
 # Remnote HTML
 
-Render HTML inside RemNote: turn any Rem into an HTML code block and see the
-rendered result below it, updating as you type.
+Render HTML inside RemNote: turn any Rem into an HTML code block, or import an
+HTML file, and see the rendered result below it, updating as you type.
 
 ## Usage
 
@@ -9,9 +9,14 @@ rendered result below it, updating as you type.
 2. Type your HTML into the code block; the result renders below it.
 3. Run the command again to remove it.
 
-The code block collapses to one line when unfocused so the output stays visible,
-click it to expand. The HTML is rendered in a sandboxed iframe, so its `<style>`
-and `<script>` tags work without affecting RemNote.
+To use an existing file instead, run **Import HTML file** and pick a `.html` /
+`.htm` file: its content becomes an HTML code block in the focused Rem if it's
+empty, otherwise in a new Rem right below it.
+
+HTML code blocks use the HTML language and have no height limit. They collapse
+to one line when unfocused so the output stays visible, click one to expand it.
+The HTML is rendered in a sandboxed iframe, so its `<style>` and `<script>`
+tags work without affecting RemNote.
 
 ## Development
 

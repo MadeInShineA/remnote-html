@@ -1,7 +1,7 @@
 {
   "author": "MadeInShineA",
   "name": "Remnote HTML",
-  "description": "Enable the use of HTML inside remnote",
+  "description": "Enable the use of HTML inside remnote, typed or imported from a file",
   "enableOnMobile": true,
   "id": "MadeInShineA-zeb281m",
   "repoUrl": "https://github.com/MadeInShineA/remnote-html",
