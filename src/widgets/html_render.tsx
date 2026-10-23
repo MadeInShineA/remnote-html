@@ -1,5 +1,7 @@
 import {
+	BuiltInPowerupCodes,
 	renderWidget,
+	usePlugin,
 	useTrackerPlugin,
 } from '@remnote/plugin-sdk';
 
@@ -27,7 +29,11 @@ const FRAME_PREAMBLE = `<style>html, body { margin: 0; }</style>
 </script>
 `;
 
+// Language key of RemNote's HTML code blocks
+const HTML_LANGUAGE = 'html';
+
 export const HtmlRenderWidget = () => {
+	const plugin = usePlugin();
 	// The frame the HTML is rendered in
 	const frameRef = useRef<HTMLIFrameElement>(null);
 	// The height reported by the frame
@@ -47,6 +53,23 @@ export const HtmlRenderWidget = () => {
 		if (!text) return '';
 		return rp.richText.toString(text);
 	});
+
+	// Make sure the code block is highlighted as HTML
+	useEffect(() => {
+		(async () => {
+			const context = await plugin.widget.getWidgetContext();
+			if (!context || !('remId' in context)) return;
+
+			const rem = await plugin.rem.findOne(context.remId);
+			if (!rem) return;
+
+			const code = BuiltInPowerupCodes.Code;
+			const slot = 'Language';
+			if ((await rem.getPowerupProperty(code, slot)) !== HTML_LANGUAGE) {
+				await rem.setPowerupProperty(code, slot, [HTML_LANGUAGE]);
+			}
+		})();
+	}, []);
 
 	// Re-render 300ms after the code stops changing
 	useEffect(() => {
